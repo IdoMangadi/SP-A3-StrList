@@ -125,6 +125,8 @@ int StrList_count(StrList* StrList, const char* data){
 	return counter;
 }
 /**
+ * This functions removes a Node from the list, given the previous node and the index to remove.
+ * Note: the function handles the allocations and the StrList new size.
  * In case the index is 0 , then previous_node will be the head.
 */
 void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_index){
@@ -148,6 +150,7 @@ void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_inde
 		previous_node->_next = previous_node->_next->_next;
 	}
 	Node_free(tmp);
+	Strlist->_size --;
 }
 
 void StrList_remove(StrList* Strlist, const char* data){
@@ -155,23 +158,22 @@ void StrList_remove(StrList* Strlist, const char* data){
 	if(strcmp(previous->_str, data) == 0){
 		StrList_remove_node(Strlist, previous, 0);
 	}
-	for(int i=0; i<(Strlist->_size)-1; i++){
+	for(int i=1; i<(Strlist->_size)-1; i++){
 		if(strcmp(previous->_next->_str, data) == 0){
-			StrList_remove_node(Strlist, i);
+			StrList_remove_node(Strlist, previous, i);
+			i--;
 		}
-		if(i < (Strlist->_size)-1){
-			current = current->_next;
+		else{
+			previous = previous->_next;
 		}
 	}
 }
 
 void StrList_removeAt(StrList* Strlist, int index){
-	Node* current = Strlist->_head;
-	if(index == 0){
-		Strlist->_head = Strlist->_head->_next;
-		return;
+	Node* previous = Strlist->_head;
+	for(int i=0; i<index-1; i++){
+		previous = previous->_next;
 	}
-	for(int i=0; i<index; i++){
-
-	}
+	StrList_remove_node(Strlist, previous, index);
 }
+
