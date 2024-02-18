@@ -25,9 +25,12 @@ Node* Node_alloc(char* str, Node* next) {
 	return p;
 }
 /**
- * This function frees the allocated memory of a Node.
+ * This function frees the allocated memory of a Node (including its string);
 */
 void Node_free(Node* node) {
+	if(node->_str != NULL){
+		free(node->_str);
+	}
 	free(node);
 }
 
@@ -40,8 +43,22 @@ StrList* StrList_alloc(Node* head){
 	return p;
 }
 
-void StrList_free(StrList* StrList){
-	free(StrList);
+void StrList_free(StrList* Strlist){
+	if(Strlist == NULL){
+		return;
+	}
+	if(Strlist->_head == NULL){
+		free(Strlist);
+		return;
+	}
+	Node* current = Strlist->_head;
+	for(int i=1; i<Strlist->_size; i++){
+		Node* tmp = current;
+		current = current->_next;
+		Node_free(tmp);
+	}
+	Node_free(current);
+	free(Strlist);
 }
 
 size_t StrList_size(const StrList* StrList){
@@ -150,7 +167,7 @@ void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_inde
 		previous_node->_next = previous_node->_next->_next;
 	}
 	Node_free(tmp);
-	Strlist->_size --;
+	Strlist->_size--;
 }
 
 void StrList_remove(StrList* Strlist, const char* data){
@@ -177,3 +194,49 @@ void StrList_removeAt(StrList* Strlist, int index){
 	StrList_remove_node(Strlist, previous, index);
 }
 
+int StrList_isEqual(const StrList* StrList1, const StrList* StrList2){
+	if(StrList1->_size != StrList2->_size){
+		return 0;
+	}
+	Node* current1 = StrList1->_head;
+	Node* current2 = StrList2->_head;
+	if(strcmp(current1->_str, current2->_str) != 0){
+		return 0;
+	}
+	for(int i=1; i<StrList1->_size; i++){
+		current1 = current1->_next;
+		current2 = current2->_next;
+		if(strcmp(current1->_str, current2->_str) != 0){
+			return 0;
+		}
+	}
+	return 1;
+}
+
+char* deep_copy_string(const char* original){
+	if( original == NULL){
+		return NULL;
+	}
+	char* copy = (char*)malloc(sizeof(char)*(strlen(original)+1));
+	strcpy(copy, original);
+	return copy;
+}
+
+StrList* StrList_clone(const StrList* Strlist){
+
+	char* tmp_str = deep_copy_string(Strlist->_head->_str); // Copying the string of the head of the StrList.
+
+	Node* tmp_node = Node_alloc(tmp_str,NULL); // Creating the head node for the new list.
+	StrList* new_list = StrList_alloc(tmp_node); // Creating the pointer to the new list.
+	new_list->_size = Strlist->_size;
+
+	Node* current = Strlist->_head;
+
+	for(int i=1; i<Strlist->_size; i++){
+		current = current->_next;
+		tmp_str = deep_copy_string(current->_str);
+		tmp_node->_next = (Node*)Node_alloc(tmp_str, NULL);
+	}
+
+	return new_list;
+}
