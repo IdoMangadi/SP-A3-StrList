@@ -36,14 +36,10 @@ void Node_free(Node* node) {
 
 // StrList implementation:
 
-StrList* StrList_alloc(Node* head){
+StrList* StrList_alloc(){
 	StrList* p = (StrList*)malloc(sizeof(StrList));
-	p->_head = head;
-	if(head == NULL){
-		p->_size = 0;
-		return p;
-	}
-	p->_size = 1;
+	p->_head = NULL;
+	p->_size = 0;
 	return p;
 }
 
@@ -72,6 +68,11 @@ size_t StrList_size(const StrList* StrList){
 
 void StrList_insertLast(StrList* StrList, const char* data){
 	Node* new_node = Node_alloc(data, NULL);
+	if(StrList->_size == 0){
+		StrList->_head = new_node;
+		StrList->_size++;
+		return;
+	}
 	Node* current = StrList->_head;
 	for(int i=1; i<StrList->_size; i++){
 		current = current->_next;
