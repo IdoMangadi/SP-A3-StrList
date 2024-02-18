@@ -39,6 +39,10 @@ void Node_free(Node* node) {
 StrList* StrList_alloc(Node* head){
 	StrList* p = (StrList*)malloc(sizeof(StrList));
 	p->_head = head;
+	if(head == NULL){
+		p->_size = 0;
+		return p;
+	}
 	p->_size = 1;
 	return p;
 }
@@ -239,4 +243,70 @@ StrList* StrList_clone(const StrList* Strlist){
 	}
 
 	return new_list;
+}
+
+void StrList_reverse(StrList* Strlist){
+	// Handling StrList of size = 1 or 0:
+	if(Strlist->_size == 0 || Strlist->_size == 1){
+		return;
+	}
+	Node* previous = Strlist->_head;
+	Node* current = previous->_next;
+	Node* next = current->_next;
+	previous->_next = NULL;
+	while(next != NULL){
+		current->_next = previous;
+		previous = current;
+		current = next;
+		next = next->_next;
+	}
+	current->_next = previous;
+	Strlist->_head = current;
+}
+/**
+ * This function swaps between two strings in two nodes.
+ * Note: it does'nt swaps the node themselfs.
+*/
+void StrList_swap(StrList* Strlist, Node* node1, Node* node2){
+	if(Strlist->_size == 0 || Strlist->_size ==1){
+		return;
+	}
+	char* tmp = node1->_str;
+	node1->_str = node2->_str;
+	node2->_str = tmp;
+}
+
+void StrList_sort( StrList* Strlist){
+	if(Strlist->_size == 0 || Strlist->_size == 1){
+		return;
+	}
+
+	Node* current = Strlist->_head;
+	for(int i=0; i<Strlist->_size; i++){  
+		// Finding the minimum from the i'th index to the last:
+		Node* min = current;
+		Node* tmp = current;
+		for(int j=i+1; j<Strlist->_size; j++){
+			tmp = tmp->_next;
+			if(strcmp(min->_str, tmp->_str) > 0){
+				min = tmp;
+			}
+		}
+		StrList_swap(Strlist, min, current);
+		current = current->_next;
+	}
+}
+
+int StrList_isSorted(StrList* Strlist){
+	if(Strlist->_size == 0 || Strlist->_size == 1){
+		return 1;
+	}
+	Node* current = Strlist->_head;
+	for(int i=0; i<(Strlist->_size)-1; i++){
+		Node* next = current->_next;
+		if(strcmp(current->_str, next->_str) > 0){
+			return 0;
+		}
+	}
+	return 1;
 }
