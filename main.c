@@ -71,7 +71,7 @@ int main(){
             if(scanf(" %d", &index) == 0){
                 continue;
             }
-            //add a condition what happend if user wants to enter index out of boundreis
+            while (getchar() != '\n');  // Consumong all scanf's leftovers.
             char* str = get_string_from_user();
             if(str == NULL){
                 continue;
@@ -101,6 +101,7 @@ int main(){
         }
 
         if (choice == 7){  // Means the user wants to print how many times given string is in the list:
+            while (getchar() != '\n');  // Consumong all scanf's leftovers.
             char* str = get_string_from_user();
             if(str == NULL){
                 continue;
@@ -109,6 +110,7 @@ int main(){
         }
 
         if(choice == 8){  // Means the user wants to remove all the appearences of the given string from the list:
+            while (getchar() != '\n');  // Consumong all scanf's leftovers.
             char* str = get_string_from_user();
             if(str == NULL){
                 continue;
@@ -139,8 +141,14 @@ int main(){
             StrList_sort(strlist);
         }
 
-        if(choice == 13){  // Means the user wants to remove all nodes from the list:
-            printf("%d",StrList_isSorted(strlist));
+        if(choice == 13){  // Means the user wants to kmow if the list is sorted:
+            int bool = StrList_isSorted(strlist);
+            if(bool == 1){
+                printf("True");
+            }
+            else{
+                printf("False");
+            }
         }
 
         scanf(" %d", &choice);

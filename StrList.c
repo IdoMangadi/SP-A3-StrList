@@ -20,7 +20,7 @@ struct _StrList {
 */
 Node* Node_alloc(const char* str, Node* next) {
 	Node* p = (Node*)malloc(sizeof(Node));  // Actually allocating memory for 2 pointers (pointer of char and pointer to Node).
-	p->_str = str;
+	p->_str = (char*)str;
 	p->_next = next;
 	return p;
 }
@@ -82,6 +82,9 @@ void StrList_insertLast(StrList* StrList, const char* data){
 }
 
 void StrList_insertAt(StrList* StrList, const char* data,int index){
+	if((size_t)index > (StrList->_size)-1 || index < 0){
+		return;
+	}
 	Node* new_node = Node_alloc(data, NULL);
 	// Inserting the new Node instead the current head:
 	if(index == 0){ 
@@ -118,6 +121,9 @@ void StrList_print(const StrList* StrList){
 }
 
 void StrList_printAt(const StrList* Strlist, int index){
+	if((size_t)index > (Strlist->_size)-1 || index < 0){
+		return;
+	}
 	Node* current = Strlist->_head;
 	if (current == NULL || current->_str ==NULL){
 		return;
@@ -131,10 +137,14 @@ void StrList_printAt(const StrList* Strlist, int index){
 int StrList_printLen(const StrList* Strlist){
 	int amount = 0;
 	Node* current = Strlist->_head;
-	amount += strlen(current->_str);
-	for(int i=0; i<(Strlist->_size)-1; i++){
+	if(current == NULL || current->_str == NULL){
+		return 0;
+	}
+	for(size_t i=0; i<Strlist->_size; i++){
+		if(current->_str != NULL){
+			amount += strlen(current->_str);
+		}
 		current = current->_next;
-		amount += strlen(current->_str);
 	}
 	return amount;
 }
@@ -142,14 +152,14 @@ int StrList_printLen(const StrList* Strlist){
 int StrList_count(StrList* StrList, const char* data){
 	int counter = 0;
 	Node* current = StrList->_head;
-	if(strcmp(current->_str, data) == 0){
-		counter++;
+	if(current == NULL){  // Cheking if there is nodes in the list:
+		return 0;
 	}
-	for(int i=0; i<(StrList->_size)-1; i++){
-		current = current->_next;
+	for(size_t i=0; i<StrList->_size; i++){
 		if(strcmp(current->_str, data) == 0){
-		counter++;
+			counter++;
 		}
+		current = current->_next;
 	}
 	return counter;
 }
@@ -158,7 +168,7 @@ int StrList_count(StrList* StrList, const char* data){
  * Note: the function handles the allocations and the StrList new size.
  * In case the index is 0 , then previous_node will be the head.
 */
-void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_index){
+void StrList_remove_node(StrList* Strlist, Node* previous_node, size_t current_index){
 	Node* tmp;
 	// Handling removing the head:
 	if(current_index == 0){
@@ -169,6 +179,9 @@ void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_inde
 		else{
 			Strlist->_head = NULL;
 		}
+		Node_free(tmp);
+		Strlist->_size--;
+		return;
 	}
 	//Handling removing other node:
 	tmp = previous_node->_next;
@@ -184,10 +197,13 @@ void StrList_remove_node(StrList* Strlist, Node* previous_node, int current_inde
 
 void StrList_remove(StrList* Strlist, const char* data){
 	Node* previous = Strlist->_head;
+	if(previous == NULL){
+		return;
+	}
 	if(strcmp(previous->_str, data) == 0){
 		StrList_remove_node(Strlist, previous, 0);
 	}
-	for(int i=1; i<(Strlist->_size)-1; i++){
+	for(size_t i=1; i<(Strlist->_size)-1; i++){
 		if(strcmp(previous->_next->_str, data) == 0){
 			StrList_remove_node(Strlist, previous, i);
 			i--;
@@ -199,28 +215,34 @@ void StrList_remove(StrList* Strlist, const char* data){
 }
 
 void StrList_removeAt(StrList* Strlist, int index){
+	if((size_t)index > (Strlist->_size)-1 || index < 0){
+		return;
+	}
 	Node* previous = Strlist->_head;
+	if(previous == NULL){
+		return;
+	}
 	for(int i=0; i<index-1; i++){
 		previous = previous->_next;
 	}
-	StrList_remove_node(Strlist, previous, index);
+	StrList_remove_node(Strlist, previous, (size_t)index);
 }
 
 int StrList_isEqual(const StrList* StrList1, const StrList* StrList2){
+	if(StrList1 == NULL || StrList2 == NULL){
+		return 0;
+	}
 	if(StrList1->_size != StrList2->_size){
 		return 0;
 	}
 	Node* current1 = StrList1->_head;
 	Node* current2 = StrList2->_head;
-	if(strcmp(current1->_str, current2->_str) != 0){
-		return 0;
-	}
-	for(int i=1; i<StrList1->_size; i++){
-		current1 = current1->_next;
-		current2 = current2->_next;
+	for(int i=0; i<StrList1->_size; i++){
 		if(strcmp(current1->_str, current2->_str) != 0){
 			return 0;
 		}
+		current1 = current1->_next;
+		current2 = current2->_next;
 	}
 	return 1;
 }
@@ -235,6 +257,9 @@ char* deep_copy_string(const char* original){
 }
 
 StrList* StrList_clone(const StrList* Strlist){
+	if(Strlist == NULL){
+		return NULL;
+	}
 
 	char* tmp_str = deep_copy_string(Strlist->_head->_str); // Copying the string of the head of the StrList.
 
