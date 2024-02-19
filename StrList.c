@@ -9,10 +9,10 @@ typedef struct _node {
     struct _node* _next;
 } Node;
 
-typedef struct _StrList {
+struct _StrList {
     Node* _head;
     size_t _size;
-} StrList;
+};
 
 // Node implementation:
 /**
@@ -115,6 +115,9 @@ void StrList_print(const StrList* StrList){
 
 void StrList_printAt(const StrList* Strlist, int index){
 	Node* current = Strlist->_head;
+	if (current == NULL || current->_str ==NULL){
+		return;
+	}
 	for(int i=0; i<index; i++){
 		current = current->_next;
 	}
@@ -310,4 +313,11 @@ int StrList_isSorted(StrList* Strlist){
 		}
 	}
 	return 1;
+}
+
+void StrList_clear(StrList* strlist){
+	int size = strlist->_size;
+	for(int i=0; i<size; i++){
+		StrList_removeAt(strlist, 0);
+	}
 }
