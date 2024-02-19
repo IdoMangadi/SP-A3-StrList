@@ -18,7 +18,7 @@ struct _StrList {
 /**
  * This function allocates memory to a Node and initiating the node's values.
 */
-Node* Node_alloc(char* str, Node* next) {
+Node* Node_alloc(const char* str, Node* next) {
 	Node* p = (Node*)malloc(sizeof(Node));  // Actually allocating memory for 2 pointers (pointer of char and pointer to Node).
 	p->_str = str;
 	p->_next = next;
@@ -315,9 +315,3 @@ int StrList_isSorted(StrList* Strlist){
 	return 1;
 }
 
-void StrList_clear(StrList* strlist){
-	int size = strlist->_size;
-	for(int i=0; i<size; i++){
-		StrList_removeAt(strlist, 0);
-	}
-}

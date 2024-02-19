@@ -99,7 +99,7 @@ int main(){
             if(str == NULL){
                 continue;
             }
-            printf("d", StrList_count(strlist, str));
+            printf("%d", StrList_count(strlist, str));
         }
 
         if(choice == 8){  // Means the user wants to remove all the appearences of the given string from the list:
@@ -123,7 +123,10 @@ int main(){
         }
 
         if(choice == 11){  // Means the user wants to remove all nodes from the list:
-            StrList_clear(strlist);
+            size_t size = StrList_size(strlist);
+            for(size_t i=0; i<size; i++){
+                StrList_removeAt(strlist, 0);
+	        }
         }
 
         if(choice == 12){  // Means the user wants to sort the list by lexicographic order:
