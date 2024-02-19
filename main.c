@@ -52,6 +52,7 @@ int main(){
                 printf("\nenter how many strings you want to insert: ");
                 int amount;  // How many strings the user wants to enter.
                 scanf(" %d", &amount);
+                while (getchar() != '\n');  // Consumong all scanf's leftovers.
                 printf("\nenter the strings: ");
                 for(int i=0; i<amount; i++){  // Getting the strings:
                     char* str = get_string_from_user();
