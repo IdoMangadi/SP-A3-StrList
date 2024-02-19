@@ -68,7 +68,7 @@ size_t StrList_size(const StrList* StrList){
 
 void StrList_insertLast(StrList* StrList, const char* data){
 	Node* new_node = Node_alloc(data, NULL);
-	if(StrList->_size == 0){
+	if(StrList->_size == 0){  // Handling case of the first str in the list:
 		StrList->_head = new_node;
 		StrList->_size++;
 		return;
@@ -106,10 +106,14 @@ char* StrList_firstData(const StrList* StrList){
 
 void StrList_print(const StrList* StrList){
 	Node* current = StrList->_head;
-	printf("%s\n", current->_str);
-	for(int i=0; i<(StrList->_size)-1; i++){
+	if(current == NULL || current->_str == NULL){  // Means there is no head to the list or in the head there is no string
+		return;
+	}
+	for(size_t i=0; i<StrList->_size; i++){
+		if(current->_str != NULL){
+			printf("%s\n", current->_str);
+		}
 		current = current->_next;
-		printf("%s\n", current->_str);
 	}
 }
 

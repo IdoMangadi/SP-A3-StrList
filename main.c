@@ -39,17 +39,20 @@ char* get_string_from_user(){
 int main(){
     StrList* strlist = StrList_alloc();
     int choice = 0;
+    printf("enter your choice: ");
+    scanf(" %d", &choice);
 
-    while(scanf(" %d", &choice) > 0 && choice != 0){ // Checks whether the scaf worked and if the user input was 0:
+    while(choice != 0){ // Checks whether the scaf worked and if the user input was 0:
 
         if (choice == 1){  // Means the user wants to input strings to the StrList:
+            printf("\nenter A: ");
             char a;
             scanf(" %c", &a);
             if (a == 'A'){
-
+                printf("\nenter how many strings you want to insert: ");
                 int amount;  // How many strings the user wants to enter.
                 scanf(" %d", &amount);
-                
+                printf("\nenter the strings: ");
                 for(int i=0; i<amount; i++){  // Getting the strings:
                     char* str = get_string_from_user();
                     if(str == NULL){
@@ -57,6 +60,7 @@ int main(){
                         return 1;
                     }
                     StrList_insertLast(strlist, str);  // Inserting to the list
+                    printf("\nthe %d string added to the list.", i+1);
                 }
             }
         }
@@ -66,6 +70,7 @@ int main(){
             if(scanf(" %d", &index) == 0){
                 continue;
             }
+            //add a condition what happend if user wants to enter index out of boundreis
             char* str = get_string_from_user();
             if(str == NULL){
                 continue;
@@ -79,7 +84,7 @@ int main(){
 
         if(choice == 4){  // Means the user wants to print the StrList's length:
             size_t size = StrList_size(strlist);
-            printf("%zu", size);
+            printf("%zu\n", size);
         }
 
         if(choice == 5){  // Means the user wants to print the string in index:
@@ -137,6 +142,7 @@ int main(){
             printf("%d",StrList_isSorted(strlist));
         }
 
+        scanf(" %d", &choice);
     }
     StrList_free(strlist);
     return 0;
