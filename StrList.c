@@ -110,14 +110,19 @@ char* StrList_firstData(const StrList* StrList){
 void StrList_print(const StrList* StrList){
 	Node* current = StrList->_head;
 	if(current == NULL || current->_str == NULL){  // Means there is no head to the list or in the head there is no string
+		printf("\n");
 		return;
 	}
 	for(size_t i=0; i<StrList->_size; i++){
 		if(current->_str != NULL){
-			printf("%s\n", current->_str);
+			printf("%s", current->_str);
+			if(i < (StrList->_size)-1){
+				printf(" ");
+			}
 		}
 		current = current->_next;
 	}
+	printf("\n");
 }
 
 void StrList_printAt(const StrList* Strlist, int index){
@@ -340,6 +345,7 @@ int StrList_isSorted(StrList* Strlist){
 		if(strcmp(current->_str, next->_str) > 0){
 			return 0;
 		}
+		current = current->_next;
 	}
 	return 1;
 }

@@ -39,30 +39,25 @@ char* get_string_from_user(){
 int main(){
     StrList* strlist = StrList_alloc();
     int choice = 0;
-    printf("enter your choice: ");
+    // printf("enter your choice: ");
     scanf(" %d", &choice);
 
     while(choice != 0){ // Checks whether the scaf worked and if the user input was 0:
 
         if (choice == 1){  // Means the user wants to input strings to the StrList:
-            printf("\nenter A: ");
-            char a;
-            scanf(" %c", &a);
-            if (a == 'A'){
-                printf("\nenter how many strings you want to insert: ");
-                int amount;  // How many strings the user wants to enter.
-                scanf(" %d", &amount);
-                while (getchar() != '\n');  // Consumong all scanf's leftovers.
-                printf("\nenter the strings: ");
-                for(int i=0; i<amount; i++){  // Getting the strings:
-                    char* str = get_string_from_user();
-                    if(str == NULL){
-                        StrList_free(strlist);
-                        return 1;
-                    }
-                    StrList_insertLast(strlist, str);  // Inserting to the list
-                    printf("\nthe %d string added to the list.", i+1);
+            // printf("\nenter how many strings you want to insert: ");
+            int amount;  // How many strings the user wants to enter.
+            scanf(" %d", &amount);
+            while (getchar() != '\n');  // Consumong all scanf's leftovers.
+            // printf("\nenter the strings: ");
+            for(int i=0; i<amount; i++){  // Getting the strings:
+                char* str = get_string_from_user();
+                if(str == NULL){
+                    StrList_free(strlist);
+                    return 1;
                 }
+                StrList_insertLast(strlist, str);  // Inserting to the list
+                // printf("\nthe %d string added to the list.", i+1);
             }
         }
 
@@ -97,7 +92,7 @@ int main(){
         }
 
         if(choice == 6){  // Means the user wants to print the chars amount of all the list:
-            printf("%d", StrList_printLen(strlist));
+            printf("%d\n", StrList_printLen(strlist));
         }
 
         if (choice == 7){  // Means the user wants to print how many times given string is in the list:
@@ -106,7 +101,7 @@ int main(){
             if(str == NULL){
                 continue;
             }
-            printf("%d", StrList_count(strlist, str));
+            printf("%d\n", StrList_count(strlist, str));
         }
 
         if(choice == 8){  // Means the user wants to remove all the appearences of the given string from the list:
@@ -144,10 +139,10 @@ int main(){
         if(choice == 13){  // Means the user wants to kmow if the list is sorted:
             int bool = StrList_isSorted(strlist);
             if(bool == 1){
-                printf("True");
+                printf("true\n");
             }
             else{
-                printf("False");
+                printf("false\n");
             }
         }
 
