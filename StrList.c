@@ -168,7 +168,7 @@ int StrList_count(StrList* StrList, const char* data){
  * Note: the function handles the allocations and the StrList new size.
  * In case the index is 0 , then previous_node will be the head.
 */
-void StrList_remove_node(StrList* Strlist, Node* previous_node, size_t current_index){
+void StrList_remove_node(StrList* Strlist, Node* previous_node, size_t current_index){ 
 	Node* tmp;
 	// Handling removing the head:
 	if(current_index == 0){
